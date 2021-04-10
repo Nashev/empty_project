@@ -21,13 +21,13 @@ public class User {
     @Version
     private Integer version;
 
-    @Column(name = "firstName")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "secondName")
+    @Column(name = "second_name")
     private String secondName;
 
-    @Column(name = "middleName")
+    @Column(name = "middle_name")
     private String middleName;
 
     @Column(name = "position")
@@ -36,16 +36,20 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "is_identified")
+    private Boolean isIdentified;
+
     @ManyToOne
-    @JoinColumn (name="citizenshipID")
+    @JoinColumn (name="office_id")
+    Office office;
+
+    @ManyToOne
+    @JoinColumn (name="citizenship_id")
     Country citizenship;
 
-    @OneToMany()
-    @JoinColumn(name = "userId")
-    private List<UserDoc> userDocs;
-
-    @Column(name = "isIdentified")
-    private Boolean isIdentified;
+    @OneToOne(optional = true)
+    @MapsId
+    private UserDoc userDoc;
 
     public Long getId() {
         return id;
@@ -75,17 +79,23 @@ public class User {
 
     public void setPhone(String phone) { this.phone = phone; }
 
+    public Boolean getIdentified() { return isIdentified; }
+
+    public void setIdentified(Boolean identified) { isIdentified = identified; }
+
+    public Office getOffice() {return office;}
+
+    public void setOffice(Office office) {
+        this.office = office;
+    }
+
     public Country getCitizenship() {return citizenship;}
 
     public void setCitizenship(Country citizenship) {
         this.citizenship = citizenship;
     }
 
-    public List<UserDoc> getUserDocs() { return userDocs; }
+    public UserDoc getUserDoc() { return userDoc; }
 
-    public void setUserDocs(List<UserDoc> userDocs) { this.userDocs = userDocs; }
-
-    public Boolean getIdentified() { return isIdentified; }
-
-    public void setIdentified(Boolean identified) { isIdentified = identified; }
+    public void setUserDocs(UserDoc userDoc) { this.userDoc = userDoc; }
 }

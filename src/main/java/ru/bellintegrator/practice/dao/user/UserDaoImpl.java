@@ -1,8 +1,8 @@
-package ru.bellintegrator.practice.dao.house;
+package ru.bellintegrator.practice.dao.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.bellintegrator.practice.model.House;
+import ru.bellintegrator.practice.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -12,12 +12,12 @@ import java.util.List;
  * {@inheritDoc}
  */
 @Repository
-public class HouseDaoImpl implements HouseDao {
+public class UserDaoImpl implements UserDao {
 
     private final EntityManager em;
 
     @Autowired
-    public HouseDaoImpl(EntityManager em) {
+    public UserDaoImpl(EntityManager em) {
         this.em = em;
     }
 
@@ -25,24 +25,25 @@ public class HouseDaoImpl implements HouseDao {
      * {@inheritDoc}
      */
     @Override
-    public List<House> all() {
-        TypedQuery<House> query = em.createQuery("SELECT h FROM House h", House.class);
+    public List<User> all() {
+        TypedQuery<User> query = em.createQuery("SELECT h FROM User h", User.class);
         return query.getResultList();
     }
 
     /**
      * {@inheritDoc}
+     * @return
      */
     @Override
-    public House loadById(Long id) {
-        return em.find(House.class, id);
+    public User loadById(Long id) {
+        return em.find(User.class, id);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void save(House house) {
-        em.persist(house);
+    public void save(User user) {
+        em.persist(user);
     }
 }

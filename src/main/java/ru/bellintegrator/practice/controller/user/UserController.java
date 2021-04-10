@@ -1,4 +1,4 @@
-package ru.bellintegrator.practice.controller.person;
+package ru.bellintegrator.practice.controller.user;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,38 +10,38 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bellintegrator.practice.service.PersonService;
-import ru.bellintegrator.practice.view.PersonView;
+import ru.bellintegrator.practice.service.UserService;
+import ru.bellintegrator.practice.view.UserView;
 
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Api(value = "PersonController", description = "Управление информацией о людях")
+@Api(value = "UserController", description = "Управление информацией о пользователях")
 @RestController
 @RequestMapping(value = "/", produces = APPLICATION_JSON_VALUE)
-public class PersonController {
+public class UserController {
 
-    private final PersonService personService;
+    private final UserService userService;
 
     @Autowired
-    public PersonController(PersonService personService) {
-        this.personService = personService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @ApiOperation(value = "Добавить нового человека", httpMethod = "POST")
+    @ApiOperation(value = "Добавить нового пользователя", httpMethod = "POST")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = String.class),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
-    @PostMapping("/person")
-    public void person(@RequestBody PersonView person) {
-        personService.add(person);
+    @PostMapping("/user")
+    public void user(@RequestBody UserView user) {
+        userService.add(user);
     }
 
-    @ApiOperation(value = "Получить список всех людей", httpMethod = "GET")
-    @GetMapping("/person")
-    public List<PersonView> persons() {
-        return personService.persons();
+    @ApiOperation(value = "Получить список всех пользователей", httpMethod = "GET")
+    @GetMapping("/user")
+    public List<UserView> users() {
+        return userService.users();
     }
 }

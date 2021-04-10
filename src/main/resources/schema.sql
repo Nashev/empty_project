@@ -1,93 +1,67 @@
-CREATE TABLE IF NOT EXISTS Person (
-    id         INTEGER              COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT ,
-    version    INTEGER NOT NULL     COMMENT 'Служебное поле hibernate',
-    first_name VARCHAR(50) NOT NULL COMMENT 'Имя',
-    age        INTEGER  NOT NULL    COMMENT 'Возраст'
-);
-COMMENT ON TABLE Person IS 'Человек';
-
-CREATE TABLE IF NOT EXISTS House (
-    id         INTEGER              COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT ,
-    version    INTEGER NOT NULL     COMMENT 'Служебное поле hibernate',
-    address    VARCHAR(50) NOT NULL COMMENT 'Адрес'
-);
-COMMENT ON TABLE House IS 'Дом';
-
-CREATE TABLE IF NOT EXISTS Person_House (
-    person_id   INTEGER  NOT NULL COMMENT 'Уникальный идентификатор человека',
-    house_id    INTEGER  NOT NULL COMMENT 'Уникальный идентификатор дома',
-
-    PRIMARY KEY (person_id, house_id)
-);
-COMMENT ON TABLE Person_House IS 'join-таблица для связи человека и дома';
-
-CREATE INDEX IX_Person_House_Id ON Person_House (house_id);
-ALTER TABLE Person_House ADD FOREIGN KEY (house_id) REFERENCES House(id);
-
-CREATE INDEX IX_House_Person_Id ON Person_House (person_id);
-ALTER TABLE Person_House ADD FOREIGN KEY (person_id) REFERENCES Person(id);
-
-
-
------------------------------------------
-
-CREATE TABLE IF NOT EXISTS Doc COMMENT 'Типа документа пользователя' (
+CREATE TABLE IF NOT EXISTS doc COMMENT 'Типа документа пользователя' (
     id            INTEGER              COMMENT 'Уникальный идентификатор типа документа' PRIMARY KEY AUTO_INCREMENT,
     version       INTEGER NOT NULL     COMMENT 'Служебное поле hibernate',
-    name          VARCHAR
+    code          VARCHAR(255) UNIQUE,
+    name          VARCHAR(255)
 ) ;
+CREATE INDEX UX_doc_code ON doc(code);
 
-CREATE TABLE IF NOT EXISTS Country COMMENT 'Страна пользователя' (
+CREATE TABLE IF NOT EXISTS country COMMENT 'Страна пользователя' (
     id            INTEGER              COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
     version       INTEGER NOT NULL     COMMENT 'Служебное поле hibernate',
-    name          VARCHAR
+    code          VARCHAR(255) UNIQUE,
+    name          VARCHAR(255)
 ) ;
+CREATE INDEX UX_country_code ON country(code);
 
-CREATE TABLE IF NOT EXISTS Organization (
-    id            INTEGER              COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
-    version       INTEGER NOT NULL     COMMENT 'Служебное поле hibernate',
-    name          VARCHAR,
-    fullName      VARCHAR,
-    inn           VARCHAR,
-    kpp           VARCHAR,
-    address       VARCHAR,
-    phone         VARCHAR,
-    isActive      BOOLEAN
+CREATE TABLE IF NOT EXISTS organization (
+    id             INTEGER              COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
+    version        INTEGER NOT NULL     COMMENT 'Служебное поле hibernate',
+    name           VARCHAR(255),
+    full_name      VARCHAR(255),
+    inn            VARCHAR(255),
+    kpp            VARCHAR(255),
+    address        VARCHAR(4000),
+    phone          VARCHAR(255),
+    is_active      BOOLEAN
 );
 
-CREATE TABLE IF NOT EXISTS Office (
-    id            INTEGER COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
-    version       INTEGER NOT NULL     COMMENT 'Служебное поле hibernate',
-    orgID         INTEGER,
-    FOREIGN KEY (orgID) REFERENCES Organization(id) ON DELETE CASCADE,
-    name          VARCHAR,
-    address       VARCHAR,
-    phone         VARCHAR,
-    isActive      BOOLEAN
+CREATE TABLE IF NOT EXISTS office (
+    id             INTEGER COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
+    version        INTEGER NOT NULL     COMMENT 'Служебное поле hibernate',
+    org_id         INTEGER,
+    FOREIGN KEY (org_id) REFERENCES organization(id) ON DELETE CASCADE,
+    name           VARCHAR(255),
+    address        VARCHAR(4000),
+    phone          VARCHAR(255),
+    is_active      BOOLEAN
 );
+CREATE INDEX IX_office_org_id ON office(org_id);
 
-CREATE TABLE IF NOT EXISTS User (
-    id            INTEGER COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
-    version       INTEGER NOT NULL     COMMENT 'Служебное поле hibernate',
-    officeID      INTEGER,
-    FOREIGN KEY (officeID) REFERENCES Office(id) ON DELETE CASCADE,
-    firstName     VARCHAR,
-    secondName    VARCHAR,
-    middleName    VARCHAR,
-    position      VARCHAR,
-    phone         VARCHAR,
-    citizenshipID INTEGER,
-    FOREIGN KEY (citizenshipID) REFERENCES Country(id) ON DELETE RESTRICT,
-    isIdentified  BOOLEAN
+CREATE TABLE IF NOT EXISTS user (
+    id             INTEGER COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
+    version        INTEGER NOT NULL     COMMENT 'Служебное поле hibernate',
+    office_id      INTEGER,
+    FOREIGN KEY (office_id) REFERENCES office(id) ON DELETE CASCADE,
+    first_name     VARCHAR(255),
+    second_name    VARCHAR(255),
+    middle_name    VARCHAR(255),
+    position       VARCHAR(255),
+    phone          VARCHAR(255),
+    citizenship_id INTEGER(255),
+    FOREIGN KEY (citizenship_id) REFERENCES country(id) ON DELETE RESTRICT,
+    is_identified  BOOLEAN
 );
+CREATE INDEX IX_user_office_id ON user(office_id);
+CREATE INDEX IX_user_citizenship_id ON user(citizenship_id);
 
-CREATE TABLE IF NOT EXISTS UserDoc (
-    id            INTEGER              COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
-    version       INTEGER NOT NULL     COMMENT 'Служебное поле hibernate',
-    userID        INTEGER              COMMENT 'Идентификатор пользователя, владельца документа',
-    FOREIGN KEY (userID) REFERENCES User(id) ON DELETE CASCADE,
-    docID         INTEGER              COMMENT 'Идентификатор типа документа',
-    FOREIGN KEY (docID) REFERENCES Doc(id) ON DELETE RESTRICT,
-    docNumber     VARCHAR,
-    docDate       DATE
+CREATE TABLE IF NOT EXISTS user_doc (
+    id             INTEGER              COMMENT 'Уникальный идентификатор пользователя' PRIMARY KEY,
+    FOREIGN KEY (id) REFERENCES user(id) ON DELETE CASCADE,
+    version        INTEGER NOT NULL     COMMENT 'Служебное поле hibernate',
+    doc_id         INTEGER              COMMENT 'Идентификатор типа документа',
+    FOREIGN KEY (doc_id) REFERENCES doc(id) ON DELETE RESTRICT,
+    doc_number     VARCHAR(255),
+    doc_date       DATE
 );
+CREATE INDEX IX_user_doc_id ON user_doc(doc_id);

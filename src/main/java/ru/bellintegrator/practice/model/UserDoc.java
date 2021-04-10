@@ -20,14 +20,15 @@ public class UserDoc {
     @Version
     private Integer version;
 
-    @ManyToOne()
-    private Doc doc;
-
-    @Column(name = "docNumber")
+    @Column(name = "doc_number")
     private String docNumber;
 
-    @Column(name = "docDate")
+    @Column(name = "doc_date")
     private Date docDate;
+
+    @ManyToOne()
+    @JoinColumn(name = "doc_id")
+    private Doc doc;
 
     public Long getId() { return id; }
 
@@ -38,5 +39,9 @@ public class UserDoc {
     public Date getDocDate() { return docDate; }
 
     public void setDocDate(Date docDate) { this.docDate = docDate; }
+
+    public Doc getDoc() { return doc; }
+
+    public void setDoc(Doc doc) { this.doc = doc; }
 
 }

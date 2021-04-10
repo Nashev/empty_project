@@ -1,9 +1,9 @@
-package ru.bellintegrator.practice.person.service;
+package ru.bellintegrator.practice.user.service;
 
 import org.junit.Test;
 
 
-public class PersonServiceTest {
+public class UserServiceTest {
     @Test
     public void test() throws Exception {
 

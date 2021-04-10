@@ -21,11 +21,18 @@ public class Country {
     @Version
     private Integer version;
 
+    @Column(name = "code")
+    private String code;
+
     @Column(name = "name")
     private String name;
 
     public Long getId() {
         return id;
+    }
+
+    public String getCode() {
+        return code;
     }
 
     public String getName() {

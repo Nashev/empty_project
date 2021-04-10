@@ -45,10 +45,10 @@ public class Application {
     @Bean
     public Docket postApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("persons")
+                .groupName("users")
                 .apiInfo(apiInfo())
                 .select()
-                .paths(regex("/person.*"))
+                .paths(regex("/user.*"))
                 .build();
     }
 
