@@ -39,17 +39,17 @@ public class User {
     @Column(name = "is_identified")
     private Boolean isIdentified;
 
-    @ManyToOne
-    @JoinColumn (name="office_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="office_id")
     Office office;
 
-    @ManyToOne
-    @JoinColumn (name="citizenship_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="citizenship_id")
     Country citizenship;
 
-    @OneToOne(optional = true)
-    @MapsId
-    private UserDoc userDoc;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    @JoinColumn(name="id")
+    UserDoc userDoc;
 
     public Long getId() {
         return id;
@@ -85,17 +85,13 @@ public class User {
 
     public Office getOffice() {return office;}
 
-    public void setOffice(Office office) {
-        this.office = office;
-    }
+    public void setOffice(Office office) { this.office = office; }
 
     public Country getCitizenship() {return citizenship;}
 
-    public void setCitizenship(Country citizenship) {
-        this.citizenship = citizenship;
-    }
+    public void setCitizenship(Country citizenship) { this.citizenship = citizenship; }
 
     public UserDoc getUserDoc() { return userDoc; }
 
-    public void setUserDocs(UserDoc userDoc) { this.userDoc = userDoc; }
+    public void setUserDoc(UserDoc userDoc) { this.userDoc = userDoc; }
 }

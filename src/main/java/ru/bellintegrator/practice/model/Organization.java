@@ -1,6 +1,7 @@
 package ru.bellintegrator.practice.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Организация
@@ -40,6 +41,14 @@ public class Organization {
     @Column(name = "is_active")
     private Boolean isActive;
 
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "organization",
+        cascade = CascadeType.REMOVE,
+        orphanRemoval = true
+    )
+    List<Office> offices;
+
     public Long getId() {
         return id;
     }
@@ -75,4 +84,16 @@ public class Organization {
     public Boolean getIsActive() { return isActive; }
 
     public void setIsActive(Boolean isActive) { this.isActive = isActive; }
+
+    public List<Office> getOffices() { return offices; }
+
+    public void addOffice(Office office) {
+        getOffices().add(office);
+        office.setOrganization(this);
+    }
+
+    public void removeOffice(Office office) {
+        getOffices().remove(office);
+        office.setOrganization(null);
+    }
 }

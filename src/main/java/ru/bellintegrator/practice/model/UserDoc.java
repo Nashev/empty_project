@@ -10,7 +10,6 @@ import java.util.Date;
 public class UserDoc {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Long id;
 
@@ -26,9 +25,14 @@ public class UserDoc {
     @Column(name = "doc_date")
     private Date docDate;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doc_id")
     private Doc doc;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn (name="id")
+    User user;
 
     public Long getId() { return id; }
 
@@ -43,5 +47,9 @@ public class UserDoc {
     public Doc getDoc() { return doc; }
 
     public void setDoc(Doc doc) { this.doc = doc; }
+
+    public User getUser() { return user; }
+
+    public void setUser(User user) { this.user = user; }
 
 }
